@@ -15,6 +15,8 @@
  */
 #pragma once
 
+#define MODULE_NAME OCDM_ClearKey
+
 //#include "cdmi.h"
 #include <interfaces/IDRM.h>
 #include "JSONWebKey.h"

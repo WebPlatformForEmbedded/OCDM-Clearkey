@@ -43,6 +43,8 @@
 using namespace std;
 using namespace WPEFramework;
 
+MODULE_NAME_DECLARATION(BUILD_REFERENCE);
+
 namespace CDMi {
 
 uint32_t MediaKeySession::s_sessionCnt = 10;
