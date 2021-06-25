@@ -184,7 +184,7 @@ CDMi_RESULT MediaKeySession::Decrypt(
     uint32_t f_cdwSubSampleMapping,
     const uint8_t *f_pbIV,
     uint32_t f_cbIV,
-    const uint8_t *f_pbData,
+    uint8_t *f_pbData,
     uint32_t f_cbData,
     uint32_t *f_pcbOpaqueClearContent,
     uint8_t **f_ppbOpaqueClearContent,
