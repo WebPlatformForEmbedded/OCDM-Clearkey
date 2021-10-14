@@ -1,7 +1,7 @@
 # Once done this will define
-#  CLEARKEY_FOUND - System has libocdmi
-#  CLEARKEY_INCLUDE_DIRS - The libocdmi include directories
-#  CLEARKEY_LIBRARIES - The libraries needed to use libcdmi
+#  CLEARKEY_FOUND - System has crypto
+#  CLEARKEY_INCLUDE_DIRS - The crypto include directories
+#  CLEARKEY_LIBRARIES - The libraries needed to use crypto
 #
 # Copyright (C) 2016 TATA ELXSI
 # Copyright (C) 2016 Metrological.
@@ -32,6 +32,6 @@ find_path (CLEARKEY_INCLUDE_DIRS NAME "opensslconf.h" PATHS "usr/include/" PATH_
 find_library(CLEARKEY_LIBRARIES NAME crypto PATH_SUFFIXES lib)
 
 include(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(CLEARKEY DEFAULT_MSG CLEARKEY_INCLUDE_DIRS CLEARKEY_LIBRARIES)
+find_package_handle_standard_args(ClearKey DEFAULT_MSG CLEARKEY_INCLUDE_DIRS CLEARKEY_LIBRARIES)
 
 mark_as_advanced(CLEARKEY_INCLUDE_DIRS CLEARKEY_LIBRARIES)
