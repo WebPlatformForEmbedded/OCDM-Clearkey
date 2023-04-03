@@ -92,6 +92,12 @@ MediaKeySession::~MediaKeySession() {
 #endif
 }
 
+CDMi_RESULT MediaKeySession::Metrics(uint32_t& bufferLength, uint8_t buffer[]) const {
+    bufferLength = 1;
+    buffer[0] = 2;
+    return CDMi_SUCCESS;
+}
+
 void MediaKeySession::Run(const IMediaKeySessionCallback *f_piMediaKeySessionCallback) {
     int ret;
     pthread_t thread;

@@ -24,30 +24,30 @@
 
 namespace CDMi {
 
-class MediaKeySession : public IMediaKeySession {
+class MediaKeySession : public IMediaKeySession, public IMediaSessionMetrics {
 public:
+    MediaKeySession() = delete;
+    MediaKeySession(MediaKeySession&&) = delete;
+    MediaKeySession(const MediaKeySession&) = delete;
+    MediaKeySession& operator= (MediaKeySession&&) = delete;
+    MediaKeySession& operator= (const MediaKeySession&) = delete;
+
     MediaKeySession(const uint8_t *f_pbInitData, uint32_t f_cbInitData);
-    virtual ~MediaKeySession();
+    ~MediaKeySession() override;
 
-// MediaKeySession overrides
-    virtual void Run(
-        const IMediaKeySessionCallback *f_piMediaKeySessionCallback);
+public:
+    // IMediaKeySession overrides
+    // ------------------------------------------------------------------------------------------
+    const char* GetSessionId() const override;
+    const char* GetKeySystem() const override;
 
-    virtual CDMi_RESULT Load();
+    void Run(const IMediaKeySessionCallback *f_piMediaKeySessionCallback) override;
+    void Update(const uint8_t* f_pbKeyMessageResponse, uint32_t f_cbKeyMessageResponse) override;
 
-    virtual void Update(
-        const uint8_t *f_pbKeyMessageResponse,
-        uint32_t f_cbKeyMessageResponse);
-
-    virtual CDMi_RESULT Remove();
-
-    virtual CDMi_RESULT Close(void);
-
-    virtual const char *GetSessionId(void) const;
-
-    virtual const char *GetKeySystem(void) const;
-
-    CDMi_RESULT Decrypt(
+    CDMi_RESULT Load() override;
+    CDMi_RESULT Remove() override;
+    CDMi_RESULT Close() override;
+    CDMi_RESULT Decrypt( 
         const uint8_t *f_pbSessionKey,
         uint32_t f_cbSessionKey,
         const EncryptionScheme encryptionScheme,
@@ -60,23 +60,24 @@ public:
         uint8_t **f_ppbOpaqueClearContent,
         const uint8_t keyIdLength,
         const uint8_t* keyId,
-        bool initWithLast15);
-
-    virtual CDMi_RESULT ReleaseClearContent(
+        bool initWithLast15) override;
+    CDMi_RESULT ReleaseClearContent(
         const uint8_t *f_pbSessionKey,
         uint32_t f_cbSessionKey,
         const uint32_t  f_cbClearContentOpaque,
-        uint8_t  *f_pbClearContentOpaque );
+        uint8_t  *f_pbClearContentOpaque ) override;
+
+    // IMediaSessionMetrics overrides
+    // ------------------------------------------------------------------------------------------
+    CDMi_RESULT Metrics (uint32_t& bufferLength, uint8_t buffer[]) const override;
 
 private:
-    static void* _CallRunThread(
-        void *arg);
+    static void* _CallRunThread(void *arg);
+    static void* _CallRunThread2(void *arg);
 
-    static void* _CallRunThread2(
-        void *arg);
+    static const char* CreateSessionId();
 
     void* RunThread(int f_i);
-    static const char* CreateSessionId();
     bool ParseClearKeyInitializationData(const std::string& initData, std::string* output);
 
     bool ParseCENCInitData(const std::string& initData, std::string* output);
@@ -85,11 +86,12 @@ private:
     std::string KeyIdsToJSON();
 
 private:
-    const char *m_sessionId;
-    static uint32_t s_sessionCnt;
-    IMediaKeySessionCallback *m_piCallback;
+    const char* m_sessionId;
+    IMediaKeySessionCallback* m_piCallback;
     media::KeyIdAndKeyPairs m_keys;
     media::KeyIds m_kids;
+
+    static uint32_t s_sessionCnt;
 };
 
 }  // namespace CDMi
