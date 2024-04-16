@@ -27,7 +27,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 option(OPTEE_AES_DECRYPTOR "Enable AES Decryption on OP-TEE environment" OFF)
 
 if(NOT NAMESPACE)
-   set(NAMESPACE "WPEFramework")
+   set(NAMESPACE "Thunder")
 endif()
 
 if(OPTEE_AES_DECRYPTOR)

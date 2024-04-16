@@ -41,7 +41,7 @@
 #define K_DECRYPTION_KEY_SIZE 16
 
 using namespace std;
-using namespace WPEFramework;
+using namespace Thunder;
 
 MODULE_NAME_DECLARATION(BUILD_REFERENCE);
 
