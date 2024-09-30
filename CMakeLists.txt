@@ -34,6 +34,13 @@ endif()
 
 option(OPTEE_AES_DECRYPTOR "Enable AES Decryption on OP-TEE environment" OFF)
 
+add_library(${MODULE_NAME} SHARED
+    MediaSession.cpp 
+    MediaSystem.cpp
+    JSONWebKey.cpp
+    jsmn/jsmn.c
+)
+
 if(OPTEE_AES_DECRYPTOR)
 find_package(OPTEEClearKey REQUIRED)
     add_compile_definitions(OPTEE_AES128)
@@ -45,13 +52,6 @@ else()
             OpenSSL::Crypto)
 
 endif()
-
-add_library(${MODULE_NAME} SHARED
-    MediaSession.cpp 
-    MediaSystem.cpp
-    JSONWebKey.cpp
-    jsmn/jsmn.c
-)
 
 set_target_properties(${MODULE_NAME} PROPERTIES
         CXX_STANDARD 11
