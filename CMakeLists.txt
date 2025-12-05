@@ -57,10 +57,7 @@ set_target_properties(${MODULE_NAME} PROPERTIES
         CXX_STANDARD 11
         CXX_STANDARD_REQUIRED YES)
 
-target_compile_options (${MODULE_NAME} PRIVATE -Wno-psabi)
-
-install(TARGETS ${MODULE_NAME}
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/${STORAGE_DIRECTORY}/plugins COMPONENT ${NAMESPACE}_Runtime)
+target_compile_options(${MODULE_NAME} PRIVATE -Wno-psabi)
 
 target_include_directories(${MODULE_NAME}
     PRIVATE
@@ -77,5 +74,6 @@ set_target_properties(${MODULE_NAME} PROPERTIES PREFIX "")
 
 install(TARGETS ${MODULE_NAME}
     PERMISSIONS OWNER_READ GROUP_READ
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/${NAMESPACE}/OCDM)
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/${NAMESPACE}/OCDM
+    COMPONENT ${NAMESPACE}_Runtime)
 
