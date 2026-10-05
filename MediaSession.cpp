@@ -41,7 +41,9 @@
 #define K_DECRYPTION_KEY_SIZE 16
 
 using namespace std;
-using namespace WPEFramework;
+using namespace Thunder;
+
+MODULE_NAME_DECLARATION(BUILD_REFERENCE);
 
 namespace CDMi {
 
@@ -88,6 +90,12 @@ MediaKeySession::~MediaKeySession() {
     if(tee_session_init == 0)
         TEE_crypto_close();
 #endif
+}
+
+CDMi_RESULT MediaKeySession::Metrics(uint32_t& bufferLength, uint8_t buffer[]) const {
+    bufferLength = 1;
+    buffer[0] = 2;
+    return CDMi_SUCCESS;
 }
 
 void MediaKeySession::Run(const IMediaKeySessionCallback *f_piMediaKeySessionCallback) {
@@ -178,11 +186,11 @@ const char* MediaKeySession::GetKeySystem(void) const {
 CDMi_RESULT MediaKeySession::Decrypt(
     const uint8_t *f_pbSessionKey,
     uint32_t f_cbSessionKey,
-    const uint32_t *f_pdwSubSampleMapping,
-    uint32_t f_cdwSubSampleMapping,
+    const EncryptionScheme encryptionScheme,
+    const EncryptionPattern& pattern,
     const uint8_t *f_pbIV,
     uint32_t f_cbIV,
-    const uint8_t *f_pbData,
+    uint8_t *f_pbData,
     uint32_t f_cbData,
     uint32_t *f_pcbOpaqueClearContent,
     uint8_t **f_ppbOpaqueClearContent,

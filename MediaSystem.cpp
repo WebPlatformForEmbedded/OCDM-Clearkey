@@ -18,18 +18,20 @@
 
 namespace CDMi {
 
-class ClearKey : public IMediaKeys {
-private:
-    ClearKey (const ClearKey&) = delete;
-    ClearKey& operator= (const ClearKey&) = delete;
+class ClearKey : public IMediaKeys, public IMediaSystemMetrics {
+public:
+    ClearKey(ClearKey&&) = delete;
+    ClearKey(const ClearKey&) = delete;
+    ClearKey& operator=(ClearKey&&) = delete;
+    ClearKey& operator=(const ClearKey&) = delete;
+
+    ClearKey() = default;
+    ~ClearKey() override = default;
 
 public:
-    ClearKey() {
-    }
-    virtual ~ClearKey() {
-    }
-
-    virtual CDMi_RESULT CreateMediaKeySession(
+    // IMediaKeys overrides
+    // ------------------------------------------------------------------------------------------
+    CDMi_RESULT CreateMediaKeySession(
         const std::string & keySystem,
         int32_t licenseType,
         const char *f_pwszInitDataType,
@@ -37,24 +39,32 @@ public:
         uint32_t f_cbInitData,
         const uint8_t *f_pbCDMData,
         uint32_t f_cbCDMData,
-        IMediaKeySession **f_ppiMediaKeySession) {
+        IMediaKeySession **f_ppiMediaKeySession) override {
         *f_ppiMediaKeySession = new CDMi::MediaKeySession(f_pbInitData, f_cbInitData);
 
         return CDMi_SUCCESS;
     }
 
-    virtual CDMi_RESULT SetServerCertificate(
+    CDMi_RESULT SetServerCertificate(
         const uint8_t *f_pbServerCertificate,
-        uint32_t f_cbServerCertificate) {
+        uint32_t f_cbServerCertificate) override {
         return CDMi_S_FALSE;
     }
 
-    virtual CDMi_RESULT DestroyMediaKeySession(
-        IMediaKeySession *f_piMediaKeySession) {
+    CDMi_RESULT DestroyMediaKeySession(
+        IMediaKeySession *f_piMediaKeySession) override {
 
         if(f_piMediaKeySession)
             delete f_piMediaKeySession;
 
+        return CDMi_SUCCESS;
+    }
+
+    // IMediaSystemMetrics overrides
+    // ------------------------------------------------------------------------------------------
+    CDMi_RESULT Metrics (uint32_t& bufferLength, uint8_t buffer[]) const override {
+        bufferLength = 1;
+        buffer[0] = 1;
         return CDMi_SUCCESS;
     }
 };
